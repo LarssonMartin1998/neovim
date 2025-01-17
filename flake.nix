@@ -18,44 +18,44 @@
       stdenv = pkgs.stdenv;
       luajitPackages = pkgs.luajitPackages;
 
-      nvim-lpeg-dylib =
-        luapkgs:
-        if stdenv.hostPlatform.isDarwin then
-          let
-            luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
-          in
-            (luapkgs.lpeg.overrideAttrs (oa: {
-              preConfigure = ''
-            # neovim wants clang .dylib
-            substituteInPlace Makefile \
-            --replace-fail "CC = gcc" "CC = clang" \
-            --replace-fail "-bundle" "-dynamiclib" \
-            --replace-fail "lpeg.so" "lpeg.dylib"
-            '';
-              preBuild = ''
-            # there seems to be implicit calls to Makefile from luarocks, we need to
-            # add a stage to build our dylib
-            make macosx
-            mkdir -p ${luaLibDir}
-            mv lpeg.dylib ${luaLibDir}/lpeg.dylib
-            '';
-              postInstall = ''
-            rm -f ${luaLibDir}/lpeg.so
-            '';
-              nativeBuildInputs =
-                oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin pkgs.fixDarwinDylibNames);
-            }))
-        else
-          luajitPackages.lpeg;
+      # nvim-lpeg-dylib =
+      #   luapkgs:
+      #   if stdenv.hostPlatform.isDarwin then
+      #     let
+      #       luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
+      #     in
+      #       (luapkgs.lpeg.overrideAttrs (oa: {
+      #         preConfigure = ''
+      #       # neovim wants clang .dylib
+      #       substituteInPlace Makefile \
+      #       --replace-fail "CC = gcc" "CC = clang" \
+      #       --replace-fail "-bundle" "-dynamiclib" \
+      #       --replace-fail "lpeg.so" "lpeg.dylib"
+      #       '';
+      #         preBuild = ''
+      #       # there seems to be implicit calls to Makefile from luarocks, we need to
+      #       # add a stage to build our dylib
+      #       make macosx
+      #       mkdir -p ${luaLibDir}
+      #       mv lpeg.dylib ${luaLibDir}/lpeg.dylib
+      #       '';
+      #         postInstall = ''
+      #       rm -f ${luaLibDir}/lpeg.so
+      #       '';
+      #         nativeBuildInputs =
+      #           oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin pkgs.fixDarwinDylibNames);
+      #       }))
+      #   else
+      #     luajitPackages.lpeg;
       requiredLuaPkgs = ps: with ps; [
         # (nvim-lpeg-dylib ps)
-        luajitPackages.lpeg
+        lpeg
         luabitop
         mpack
         luv
       ];
 
-      neovimLuaEnv = pkgs.lua.withPackages requiredLuaPkgs;
+      neovimLuaEnv = luajitPackages.withPackages requiredLuaPkgs;
     in {
       neovim = pkgs.stdenv.mkDerivation {
         pname = "neovim";
