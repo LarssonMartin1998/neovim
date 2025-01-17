@@ -16,46 +16,16 @@
     packages = lib.genAttrs supportedSystems (system: let
       pkgs = import nixpkgs { inherit system; };
       stdenv = pkgs.stdenv;
-      luajitPackages = pkgs.luajitPackages;
+      lua = pkgs.lua;
 
-      # nvim-lpeg-dylib =
-      #   luapkgs:
-      #   if stdenv.hostPlatform.isDarwin then
-      #     let
-      #       luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
-      #     in
-      #       (luapkgs.lpeg.overrideAttrs (oa: {
-      #         preConfigure = ''
-      #       # neovim wants clang .dylib
-      #       substituteInPlace Makefile \
-      #       --replace-fail "CC = gcc" "CC = clang" \
-      #       --replace-fail "-bundle" "-dynamiclib" \
-      #       --replace-fail "lpeg.so" "lpeg.dylib"
-      #       '';
-      #         preBuild = ''
-      #       # there seems to be implicit calls to Makefile from luarocks, we need to
-      #       # add a stage to build our dylib
-      #       make macosx
-      #       mkdir -p ${luaLibDir}
-      #       mv lpeg.dylib ${luaLibDir}/lpeg.dylib
-      #       '';
-      #         postInstall = ''
-      #       rm -f ${luaLibDir}/lpeg.so
-      #       '';
-      #         nativeBuildInputs =
-      #           oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin pkgs.fixDarwinDylibNames);
-      #       }))
-      #   else
-      #     luajitPackages.lpeg;
-      requiredLuaPkgs = ps: with ps; [
-        # (nvim-lpeg-dylib ps)
+      requiredLuaPkgs = [
         lpeg
         luabitop
         mpack
         luv
       ];
 
-      neovimLuaEnv = luajitPackages.withPackages requiredLuaPkgs;
+      neovimLuaEnv = lua.withPackages requiredLuaPkgs;
     in {
       neovim = pkgs.stdenv.mkDerivation {
         pname = "neovim";
@@ -67,7 +37,6 @@
           cmake
           ninja
           clang
-          luajit
           libuv
           libvterm-neovim
           lua.pkgs.libluv
@@ -88,7 +57,7 @@
         '';
 
         passthru = {
-          lua = pkgs.luajit;
+          lua = lua;
         };
 
         # Add metadata here
