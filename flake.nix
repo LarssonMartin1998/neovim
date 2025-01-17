@@ -48,7 +48,7 @@
           luajitPackages.lpeg;
       requiredLuaPkgs = ps: with ps; [
         # (nvim-lpeg-dylib ps)
-        luajitPackages.lpeg;
+        luajitPackages.lpeg
         luabitop
         mpack
         luv
