@@ -18,12 +18,17 @@
       stdenv = pkgs.stdenv;
       lua = pkgs.lua;
 
-      requiredLuaPackages = with lua.pkgs; [
-        lpeg
-        luabitop
-        mpack
-        luv
-      ];
+      requiredLuaPackages =
+        ps:
+        (
+          with ps;
+          [
+            lpeg
+            luabitop
+            mpack
+            luv
+          ]
+        );
 
       neovimLuaEnv = lua.withPackages requiredLuaPackages;
     in {
