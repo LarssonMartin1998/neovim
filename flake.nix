@@ -27,6 +27,7 @@
             ninja
             clang
             luajit
+            luv
           ];
 
           nativeBuildInputs = with pkgs; [ pkg-config ];
