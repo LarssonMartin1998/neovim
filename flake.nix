@@ -18,14 +18,12 @@
       stdenv = pkgs.stdenv;
       lua = pkgs.lua;
 
-      requiredLuaPkgs = [
-        lpeg
+      neovimLuaEnv = lua.withPackages [
+        luapkgs.lpeg
         luabitop
         mpack
         luv
       ];
-
-      neovimLuaEnv = lua.withPackages requiredLuaPkgs;
     in {
       neovim = pkgs.stdenv.mkDerivation {
         pname = "neovim";
