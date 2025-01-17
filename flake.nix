@@ -19,7 +19,7 @@
       lua = pkgs.lua;
 
       neovimLuaEnv = lua.withPackages [
-        luapkgs.lpeg
+        lua.pkgs.lpeg
         luabitop
         mpack
         luv
