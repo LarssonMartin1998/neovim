@@ -3,6 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
+    neovim-source = {
+      url = "github:LarssonMartin1998/neovim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs }: let
@@ -20,10 +24,7 @@
           pname = "neovim";
           version = "latest-stable-version";
 
-          src = builtins.fetchGit {
-            url = "https://github.com/LarssonMartin1998/neovim";
-            ref = "refs/tags/latest-stable-version";
-          };
+          src = neovim-source;
 
           buildInputs = with pkgs; [
             cmake
