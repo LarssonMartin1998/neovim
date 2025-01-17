@@ -9,7 +9,7 @@
     };
   };
 
-  outputs = { self, nixpkgs }: let
+  outputs = { self, nixpkgs, neovim-source }: let
     lib = nixpkgs.lib;
     supportedSystems = [
       "x86_64-linux"
