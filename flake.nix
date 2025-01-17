@@ -42,7 +42,7 @@
             rm -f ${luaLibDir}/lpeg.so
             '';
               nativeBuildInputs =
-                oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
+                oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin pkgs.fixDarwinDylibNames);
             }))
         else
           luapkgs.lpeg;
