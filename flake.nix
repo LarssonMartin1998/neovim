@@ -16,6 +16,7 @@
     packages = lib.genAttrs supportedSystems (system: let
       pkgs = import nixpkgs { inherit system; };
       stdenv = pkgs.stdenv;
+      luajitPackages = pkgs.luajitPackages;
 
       nvim-lpeg-dylib =
         luapkgs:
