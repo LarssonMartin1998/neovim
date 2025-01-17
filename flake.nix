@@ -45,9 +45,10 @@
                 oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin pkgs.fixDarwinDylibNames);
             }))
         else
-          luapkgs.lpeg;
+          luajitPackages.lpeg;
       requiredLuaPkgs = ps: with ps; [
-        (nvim-lpeg-dylib ps)
+        # (nvim-lpeg-dylib ps)
+        luajitPackages.lpeg;
         luabitop
         mpack
         luv
