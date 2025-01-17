@@ -53,7 +53,7 @@
             homepage = "https://github.com/LarssonMartin1998/neovim";
             maintainers = [ maintainers.LarssonMartin1998 ]; # Replace with your username if it's defined
             platforms = platforms.unix; # Add more platforms if needed
-            license = with.lib.licenses; [ vim asl20 ];
+            license = with licenses [ vim asl20 ];
           };
         };
       });
