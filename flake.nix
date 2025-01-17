@@ -26,6 +26,7 @@
             cmake
             ninja
             clang
+            lua
           ];
 
           nativeBuildInputs = with pkgs; [ pkg-config ];
