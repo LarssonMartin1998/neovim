@@ -40,6 +40,20 @@
           installPhase = ''
             make install DESTDIR=$out
           '';
+
+          # Add metadata here
+          meta = with pkgs.lib; {
+            description = "Fork of Neovim built from the latest-stable-version tag";
+            longDescription = ''
+              This is a Neovim built from source, no changes have been made to the repo
+              outside of adding a flake and tagging the version that I've built.
+              This will always build from the "latest-stable-version" tag, and that is
+              in context to my personal config.
+            '';
+            homepage = "https://github.com/LarssonMartin1998/neovim";
+            maintainers = [ maintainers.LarssonMartin1998 ]; # Replace with your username if it's defined
+            platforms = platforms.unix; # Add more platforms if needed
+          };
         };
       });
 
