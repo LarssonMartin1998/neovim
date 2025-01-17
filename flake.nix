@@ -15,6 +15,14 @@
   in {
     packages = lib.genAttrs supportedSystems (system: let
       pkgs = import nixpkgs { inherit system; };
+
+      requiredLuaPkgs = ps: with ps; [
+        luabitop
+        mpack
+        luv
+      ];
+
+      neovimLuaEnv = pkgs.lua.withPackages requiredLuaPkgs;
     in {
       neovim = pkgs.stdenv.mkDerivation {
         pname = "neovim";
