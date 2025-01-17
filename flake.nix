@@ -26,7 +26,7 @@
             cmake
             ninja
             clang
-            lua
+            luajit
           ];
 
           nativeBuildInputs = with pkgs; [ pkg-config ];
@@ -38,6 +38,10 @@
           installPhase = ''
             make install DESTDIR=$out
           '';
+
+          passthru = {
+            lua = pkgs.luajit;
+          };
 
           # Add metadata here
           meta = with pkgs.lib; {
